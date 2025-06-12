@@ -33,4 +33,28 @@ export class PokemonWorldLibService {
       //tap((pokemon) => console.log('Fetched Pokemon:', pokemon))
     );
   }
+
+  getPokemonById(id: Number): any {
+    return this.httpCient.get<any>('https://pokeapi.co/api/v2/pokemon/1').pipe(
+      map((response: any) =>
+        response.results.map((pokemon: any) => ({ ...pokemon }))
+      ),
+      switchMap((pokemons: any) => {
+        const pokemonDetailsRequests = pokemons.map((p: PokemonList) =>
+          this.httpCient.get<PokemonList>(p.url).pipe(
+            map((details: any) => ({
+              name: details.name,
+              url: details.url,
+              id: details.id,
+              height: details.height,
+              weight: details.weight,
+              types: details.types.map((type: any) => type.type.name),
+            }))
+          )
+        );
+        return forkJoin(pokemonDetailsRequests);
+      })
+      //tap((pokemon) => console.log('Fetched Pokemon:', pokemon))
+    );
+  }
 }
