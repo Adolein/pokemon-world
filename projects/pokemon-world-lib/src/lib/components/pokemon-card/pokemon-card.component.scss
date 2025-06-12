@@ -1,0 +1,7 @@
+div {
+  display: inline-block;
+  margin: 15px;
+  &:hover {
+    cursor: pointer;
+  }
+}

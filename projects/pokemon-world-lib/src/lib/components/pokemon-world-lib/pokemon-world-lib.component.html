@@ -1,29 +1,9 @@
-<p>pokemon-world-lib works!</p>
-<lib-test></lib-test>
-<button mat-button>
-  <mat-icon>home</mat-icon>
-  click me
-</button>
-
-{{ pokemonList | json }}
+@if ( pokemonList && pokemonList.length > 0) {
+<!-- {{ pokemonList | json }} -->
 
 <div>
   @for (pokemon of pokemonList; track $index) {
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ pokemon.name }}</mat-card-title>
-      <mat-card-subtitle>Type: {{ pokemon.type }}</mat-card-subtitle>
-    </mat-card-header>
-    <img
-      style="height: 200px; width: 200px"
-      mat-card-image
-      [src]="'https://img.pokemondb.net/artwork/' + pokemon.name + '.jpg'"
-      alt="{{ pokemon.name }}"
-    />
-    <mat-card-content>
-      <p>Height: {{ pokemon.height }} m</p>
-      <p>Weight: {{ pokemon.weight }} kg</p>
-    </mat-card-content>
-  </mat-card>
+  <lib-pokemon-card [pokemon]="pokemon"></lib-pokemon-card>
   }
 </div>
+}
