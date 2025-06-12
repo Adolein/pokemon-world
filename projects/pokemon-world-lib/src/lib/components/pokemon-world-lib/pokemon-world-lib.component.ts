@@ -1,10 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { TestComponent } from '../test/test.component';
 import { PokemonWorldLibService } from '../../services/pokemon-world-lib.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'lib-pokemon-world-lib',
-  imports: [TestComponent],
+  imports: [TestComponent, MatButtonModule, MatIconModule],
   templateUrl: './pokemon-world-lib.component.html',
   styleUrl: './pokemon-world-lib.component.scss',
 })
