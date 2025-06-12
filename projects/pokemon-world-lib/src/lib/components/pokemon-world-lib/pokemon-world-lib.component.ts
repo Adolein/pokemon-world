@@ -3,10 +3,19 @@ import { TestComponent } from '../test/test.component';
 import { PokemonWorldLibService } from '../../services/pokemon-world-lib.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { tap } from 'rxjs';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'lib-pokemon-world-lib',
-  imports: [TestComponent, MatButtonModule, MatIconModule],
+  imports: [
+    TestComponent,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    JsonPipe,
+  ],
   templateUrl: './pokemon-world-lib.component.html',
   styleUrl: './pokemon-world-lib.component.scss',
 })
@@ -15,9 +24,8 @@ export class PokemonWorldLibComponent implements OnInit {
   pokemonList: any = [];
 
   ngOnInit(): void {
-    this.pokemonService
+    this.pokemonList = this.pokemonService
       .getPokemonList()
-      .subscribe((pokemon) => (this.pokemonList = pokemon));
-    console.log('Pokemon List:', this.pokemonList);
+      .subscribe((pokemon: any) => (this.pokemonList = pokemon));
   }
 }
