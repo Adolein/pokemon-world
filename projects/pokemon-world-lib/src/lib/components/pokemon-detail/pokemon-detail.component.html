@@ -1,3 +1,29 @@
-<p>pokemon-detail works!</p>
+@if ( pokemonDetails) {
+<!-- {{ pokemonDetails | json }} -->
 
-{{ pokemonDetails | json }}
+<div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ pokemonDetails.name }}</mat-card-title>
+      <mat-card-subtitle
+        >Type: @for (type of pokemonDetails.types; track $index) {
+        {{ type.type.name }} }
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <img
+      style="height: 600px; width: 600px"
+      mat-card-image
+      [src]="
+        'https://img.pokemondb.net/artwork/' + pokemonDetails.name + '.jpg'
+      "
+      alt="{{ pokemonDetails.name }}"
+    />
+    <mat-card-content>
+      <p>Height: {{ pokemonDetails.height }} m</p>
+      <p>Weight: {{ pokemonDetails.weight }} kg</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+}

@@ -2,15 +2,59 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 import { PokemonList } from '../models/pokemonList';
+import { PokemonListResponse } from '../models/pokemonListResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonWorldLibService {
-  PokemonAPIUrl = 'https://pokeapi.co/api/v2/pokemon?limit=100&offset=0';
-  private httpCient = inject(HttpClient);
+  PokemonAPIUrl = 'https://pokeapi.co/api/v2/pokemon';
+  private httpClient = inject(HttpClient);
 
-  getPokemonList(): any {
+  getPokemonList(): Observable<PokemonList[]> {
+    const pokemonlisturl = this.PokemonAPIUrl + '?limit=100&offset=0';
+    /* console.log(
+      this.getPokemonByUrl(this.PokemonAPIUrl + '/' + 1).subscribe((d) =>
+        console.log('getPokemonByUrl', d)
+      )
+    ); */
+
+    return this.httpClient
+      .get<PokemonListResponse<PokemonList>>(pokemonlisturl)
+      .pipe(
+        //tap((response) => console.log(response)),
+        map((respone) =>
+          respone.results.map(
+            (pokemon: PokemonList) => ({ ...pokemon } as PokemonList)
+          )
+        )
+      );
+  }
+
+  getPokemonById(id: number): Observable<PokemonList> {
+    const pokemonlisturl = this.PokemonAPIUrl + '/' + id;
+    return this.httpClient
+      .get<any>(pokemonlisturl)
+      .pipe(tap((response) => console.log('res', response)));
+  }
+  getPokemonByUrl(url: string): Observable<PokemonList> {
+    return this.httpClient.get<any>(url);
+  }
+
+  /* getPokemon(id: number): Observable<PokemonList> {
+    const pokemonlisturl = this.PokemonAPIUrl + '/' + id;
+    return this.httpCient
+      .get<PokemonList>(pokemonlisturl)
+      .pipe(
+        map((respone) =>
+          respone.map(
+            (pokemon: PokemonList) => ({ ...pokemon } as PokemonList)
+          )
+        )
+      );
+  } */
+
+  /* getPokemonList(): any {
     return this.httpCient.get<any>(this.PokemonAPIUrl).pipe(
       map((response: any) =>
         response.results.map((pokemon: any) => ({ ...pokemon }))
@@ -56,5 +100,5 @@ export class PokemonWorldLibService {
       })
       //tap((pokemon) => console.log('Fetched Pokemon:', pokemon))
     );
-  }
+  } */
 }

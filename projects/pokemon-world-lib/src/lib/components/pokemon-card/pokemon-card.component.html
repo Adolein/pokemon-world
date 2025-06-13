@@ -1,8 +1,13 @@
 <div>
+  <a [routerLink]="['/pokemon', this.pokemon.name, this.pokemon.id]"></a>
   <mat-card (click)="onCardClick()">
     <mat-card-header>
       <mat-card-title>{{ pokemon.name }}</mat-card-title>
-      <mat-card-subtitle>Type: {{ pokemon.type }}</mat-card-subtitle>
+
+      <mat-card-subtitle
+        >Type: @for (type of pokemon.types; track $index) {
+        {{ type.type.name }} }
+      </mat-card-subtitle>
     </mat-card-header>
     <img
       style="height: 200px; width: 200px"
