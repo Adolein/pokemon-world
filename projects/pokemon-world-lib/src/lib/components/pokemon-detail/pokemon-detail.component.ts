@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'lib-pokemon-detail',
-  imports: [MatCardModule, JsonPipe],
+  imports: [MatCardModule],
   templateUrl: './pokemon-detail.component.html',
   styleUrl: './pokemon-detail.component.scss',
 })

@@ -22,7 +22,6 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    JsonPipe,
     PokemonCardComponent,
     PokemonCardComponent,
   ],
@@ -33,42 +32,20 @@ export class PokemonWorldLibComponent implements OnInit {
   pokemonService = inject(PokemonWorldLibService);
   pokemonList: any = [];
 
-  /* ngOnInit(): void {
-    this.pokemonList = this.pokemonService
-      .getPokemonList()
-      .subscribe((pokemon: any) => (this.pokemonList = pokemon));
-  } */
-  /* ngOnInit(): void {
-    this.pokemonService
-      .getPokemonList()
-      .pipe(
-        //tap((pokemon: any) => console.log('Pokemon List:', pokemon)),
-        map((p: any) =>
-          p.map((t: any) => this.pokemonService.getPokemonByUrl(t.url))
-        )
-      )
-      .subscribe((p) => {
-        this.pokemonList.push(p);
-      });
-  } */
-
   ngOnInit(): void {
     this.pokemonService
       .getPokemonList()
       .pipe(
         switchMap((pokemonList) => {
-          // Erstelle ein Array von Observables für jede URL
           const detailRequests = pokemonList.map((pokemon) =>
             this.pokemonService.getPokemonByUrl(pokemon.url)
           );
-
-          // Führe alle Requests parallel aus
           return forkJoin(detailRequests);
         })
       )
       .subscribe((details) => {
-        this.pokemonList = details; // Array mit allen Details
-        console.log('Alle Pokémon-Details:', this.pokemonList);
+        this.pokemonList = details;
+        console.log('Pokemon-Details:', this.pokemonList);
       });
   }
 }

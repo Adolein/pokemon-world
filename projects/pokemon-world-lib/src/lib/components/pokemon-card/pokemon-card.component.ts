@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'lib-pokemon-card',
-  imports: [MatCardModule, RouterModule, JsonPipe],
+  imports: [MatCardModule, RouterModule],
   templateUrl: './pokemon-card.component.html',
   styleUrl: './pokemon-card.component.scss',
 })
