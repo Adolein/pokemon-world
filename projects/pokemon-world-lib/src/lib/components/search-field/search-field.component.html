@@ -2,11 +2,16 @@
   <label for="search-input" class="search-label">Search</label>
   <input
     [(ngModel)]="searchValue"
-    (keyup.enter)="onEnterPressed()"
+    (keyup.enter)="onSearchChange()"
     (ngModelChange)="onSearchChange()"
     type="text"
     id="search-input"
   />
+  @if(searchValue.length > 0) {
+  <mat-icon class="clear-icon" (click)="searchValue = ''; onSearchChange()"
+    >close</mat-icon
+  >
+  } @else {
   <mat-icon class="search-icon">search</mat-icon>
-  <mat-icon class="clear-icon">close</mat-icon>
+  }
 </div>

@@ -20,9 +20,11 @@ export class PokemonWorldLibService {
       .pipe(
         map((respone) =>
           respone.results.filter((pokemon: PokemonList) =>
-            pokemon.name.includes(queryParams.search || '')
-              ? ({ ...pokemon } as PokemonList)
-              : null
+            queryParams.search
+              ? pokemon.name.includes(queryParams.search || '')
+                ? ({ ...pokemon } as PokemonList)
+                : null
+              : ({ ...pokemon } as PokemonList)
           )
         )
       );

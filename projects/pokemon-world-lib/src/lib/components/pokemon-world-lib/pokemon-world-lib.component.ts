@@ -3,11 +3,12 @@ import { PokemonWorldLibService } from '../../services/pokemon-world-lib.service
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { catchError, forkJoin, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, of, Subscription, switchMap } from 'rxjs';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchFieldComponent } from '../search-field/search-field.component';
 import { ActivatedRoute } from '@angular/router';
 import { PokemonQuery } from '../../models/pokemonQuery';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'lib-pokemon-world-lib',
@@ -25,23 +26,26 @@ import { PokemonQuery } from '../../models/pokemonQuery';
 export class PokemonWorldLibComponent implements OnInit {
   pokemonService = inject(PokemonWorldLibService);
   pokemonList: any = [];
-  private activatedRoute = inject(ActivatedRoute);
   searchValue = '';
 
-  ngOnInit(): void {
-    const searchValue =
-      this.activatedRoute.snapshot.queryParams['search'] || '';
-    console.log('Search Value:', searchValue);
+  private searchSub!: Subscription;
 
-    this.loadPokemonList({ search: searchValue });
+  constructor(private searchService: SearchService) {}
+
+  ngOnInit(): void {
+    this.searchSub = this.searchService.search$.subscribe((searchTerm) => {
+      console.log('searching:', searchTerm);
+      this.loadPokemonList({ search: searchTerm });
+    });
+    this.loadPokemonList({});
   }
 
-  /*   onSearchChange(searchValue: string) {
-    console.log('Search Value:', searchValue);
-    this.loadPokemonList({ search: searchValue || '' });
-  } */
+  ngOnDestroy(): void {
+    this.searchSub.unsubscribe(); // Cleanup
+  }
 
   private loadPokemonList(queryParams: PokemonQuery) {
+    this.pokemonList = [];
     this.pokemonService
       .getPokemonList({ search: queryParams.search || '' })
       .pipe(

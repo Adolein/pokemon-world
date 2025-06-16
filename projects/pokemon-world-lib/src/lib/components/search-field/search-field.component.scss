@@ -12,6 +12,15 @@
   margin-left: -25px;
 }
 
+.clear-icon {
+  width: 22px;
+  height: 22px;
+  margin-left: -25px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .search-label {
   margin-right: 0.5rem;
 }

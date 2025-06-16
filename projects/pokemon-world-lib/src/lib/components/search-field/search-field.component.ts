@@ -1,39 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { SearchService } from '../../services/search.service';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'lib-search-field',
   imports: [MatIcon, CommonModule, FormsModule],
   templateUrl: './search-field.component.html',
   styleUrl: './search-field.component.scss',
 })
-export class SearchFieldComponent implements OnInit {
+export class SearchFieldComponent {
   private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
+  searchValue = this.activatedRoute.snapshot.queryParams['search'] || '';
 
-  searchValue = '';
+  constructor(private searchService: SearchService) {}
 
-  onSearchChange() {
-    console.log('Search Value:', this.searchValue);
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { search: this.searchValue || null },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  onEnterPressed() {
-    console.log('Search Value:', this.searchValue);
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { search: this.searchValue || null },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  ngOnInit(): void {
-    this.searchValue = this.activatedRoute.snapshot.queryParams['search'] || '';
+  onSearchChange(): void {
+    this.searchService.setSearchTerm(this.searchValue);
   }
 }
