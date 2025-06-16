@@ -1,0 +1,12 @@
+<div class="search-field-container">
+  <label for="search-input" class="search-label">Search</label>
+  <input
+    [(ngModel)]="searchValue"
+    (keyup.enter)="onEnterPressed()"
+    (ngModelChange)="onSearchChange()"
+    type="text"
+    id="search-input"
+  />
+  <mat-icon class="search-icon">search</mat-icon>
+  <mat-icon class="clear-icon">close</mat-icon>
+</div>

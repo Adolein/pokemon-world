@@ -1,6 +1,5 @@
+<lib-search-field />
 @if ( pokemonList && pokemonList.length > 0) {
-<!-- {{ pokemonList | json }} -->
-
 <div>
   @for (pokemon of pokemonList; track $index) {
   <lib-pokemon-card [pokemon]="pokemon"></lib-pokemon-card>
