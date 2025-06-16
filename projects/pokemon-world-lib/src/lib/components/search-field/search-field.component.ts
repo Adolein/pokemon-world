@@ -15,7 +15,7 @@ export class SearchFieldComponent {
   private activatedRoute = inject(ActivatedRoute);
   searchValue = this.activatedRoute.snapshot.queryParams['search'] || '';
 
-  constructor(private searchService: SearchService) {}
+  searchService = inject(SearchService);
 
   onSearchChange(): void {
     this.searchService.setSearchTerm(this.searchValue);

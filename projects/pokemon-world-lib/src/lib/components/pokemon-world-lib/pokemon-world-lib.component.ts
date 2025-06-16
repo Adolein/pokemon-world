@@ -6,7 +6,6 @@ import { MatCardModule } from '@angular/material/card';
 import { catchError, forkJoin, of, Subscription, switchMap } from 'rxjs';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchFieldComponent } from '../search-field/search-field.component';
-import { ActivatedRoute } from '@angular/router';
 import { PokemonQuery } from '../../models/pokemonQuery';
 import { SearchService } from '../../services/search.service';
 
@@ -25,24 +24,16 @@ import { SearchService } from '../../services/search.service';
 })
 export class PokemonWorldLibComponent implements OnInit {
   pokemonService = inject(PokemonWorldLibService);
+  searchService = inject(SearchService);
   pokemonList: any = [];
 
-  private searchSub!: Subscription;
-
-  constructor(private searchService: SearchService) {}
-
   ngOnInit(): void {
-    this.searchSub = this.searchService.search$.subscribe((searchTerm) => {
-      console.log('searching:', searchTerm);
+    this.searchService.search$.subscribe((searchTerm) => {
       this.loadPokemonList({ search: searchTerm });
     });
 
     const searchValue = this.searchService.getSearchTerm() || '';
     this.loadPokemonList({ search: searchValue });
-  }
-
-  ngOnDestroy(): void {
-    this.searchSub.unsubscribe(); // Cleanup
   }
 
   private loadPokemonList(queryParams: PokemonQuery) {
