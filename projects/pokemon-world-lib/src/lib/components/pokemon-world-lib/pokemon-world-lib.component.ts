@@ -26,7 +26,6 @@ import { SearchService } from '../../services/search.service';
 export class PokemonWorldLibComponent implements OnInit {
   pokemonService = inject(PokemonWorldLibService);
   pokemonList: any = [];
-  searchValue = '';
 
   private searchSub!: Subscription;
 
@@ -37,7 +36,9 @@ export class PokemonWorldLibComponent implements OnInit {
       console.log('searching:', searchTerm);
       this.loadPokemonList({ search: searchTerm });
     });
-    this.loadPokemonList({});
+
+    const searchValue = this.searchService.getSearchTerm() || '';
+    this.loadPokemonList({ search: searchValue });
   }
 
   ngOnDestroy(): void {

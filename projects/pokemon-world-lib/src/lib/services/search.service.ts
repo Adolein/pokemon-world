@@ -26,4 +26,8 @@ export class SearchService {
     });
     this.searchSubject.next(searchTerm);
   }
+
+  getSearchTerm(): string {
+    return this.router.routerState.snapshot.root.queryParams['search'] || '';
+  }
 }
