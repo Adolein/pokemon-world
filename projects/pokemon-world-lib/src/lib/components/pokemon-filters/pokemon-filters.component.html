@@ -1,0 +1,26 @@
+<div>
+  <mat-form-field>
+    <mat-label>Choose a Type</mat-label>
+    <mat-select
+      [formControl]="selectedType"
+      (ngModelChange)="onTypeChange($event)"
+    >
+      <mat-option value="">All Types</mat-option>
+      @for (pokemonType of pokemonTypes; track pokemonType) {
+      <mat-option [value]="pokemonType">{{ pokemonType.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <!-- <select
+    class="form-select"
+    [(ngModel)]="selectedType"
+    (ngModelChange)="onTypeChange($event)"
+  >
+    <option value="">All Types</option>
+    <option *ngFor="let type of pokemonTypes" [value]="type">
+      {{ type.name }}
+    </option>
+  </select> -->
+  limit: offset:
+</div>

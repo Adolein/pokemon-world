@@ -13,21 +13,43 @@ export class PokemonWorldLibService {
   private httpClient = inject(HttpClient);
 
   getPokemonList(queryParams: PokemonQuery): Observable<PokemonList[]> {
-    const pokemonlisturl = this.PokemonAPIUrl + '?limit=100&offset=0';
+    let pokemonlisturl = this.PokemonAPIUrl + '?limit=100&offset=0';
+    console.log('queryParams', queryParams);
+
+    if (queryParams.type) {
+      pokemonlisturl = queryParams.type;
+    }
+    console.log('pokemonlisturl', pokemonlisturl);
 
     return this.httpClient
       .get<PokemonListResponse<PokemonList>>(pokemonlisturl)
       .pipe(
-        map((respone) =>
-          respone.results.filter((pokemon: PokemonList) =>
-            queryParams.search
-              ? pokemon.name.includes(queryParams.search || '')
-                ? ({ ...pokemon } as PokemonList)
-                : null
-              : ({ ...pokemon } as PokemonList)
-          )
-        )
+        map((respone) => {
+          if (queryParams.type) return this.getTypeFilterdPokemonList(respone);
+          else
+            return this.getsearchPokemonList(respone, queryParams.search || '');
+        })
       );
+  }
+
+  private getsearchPokemonList(respone: any, search: string) {
+    return respone.results.filter((pokemon: PokemonList) =>
+      search
+        ? pokemon.name
+            .toLocaleLowerCase()
+            .includes(search.toLocaleLowerCase() || '')
+          ? ({ ...pokemon } as PokemonList)
+          : null
+        : ({ ...pokemon } as PokemonList)
+    );
+  }
+
+  private getTypeFilterdPokemonList(respone: any) {
+    console.log('respone', respone.pokemon);
+
+    return respone.pokemon.map(
+      (item: any) => ({ ...item.pokemon } as PokemonList)
+    );
   }
 
   getPokemonById(id: number): Observable<PokemonList> {

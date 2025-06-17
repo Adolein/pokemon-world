@@ -1,4 +1,7 @@
-<lib-search-field />
+<div class="search-filter-container">
+  <lib-search-field />
+  <lib-pokemon-filters />
+</div>
 @if ( pokemonList && pokemonList.length > 0) {
 <div>
   @for (pokemon of pokemonList; track $index) {

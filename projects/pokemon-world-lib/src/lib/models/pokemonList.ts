@@ -5,4 +5,5 @@ export interface PokemonList {
   height: number;
   weight: number;
   types: string[];
+  pokemon?: any[];
 }

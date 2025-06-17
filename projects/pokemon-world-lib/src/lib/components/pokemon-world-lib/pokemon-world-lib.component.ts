@@ -8,6 +8,9 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchFieldComponent } from '../search-field/search-field.component';
 import { PokemonQuery } from '../../models/pokemonQuery';
 import { SearchService } from '../../services/search.service';
+import { PokemonFiltersComponent } from '../pokemon-filters/pokemon-filters.component';
+import { PokemonType } from '../../models/PokemonTypes';
+import { pokemonFilterService } from '../../services/pokemon-filters.service';
 
 @Component({
   selector: 'lib-pokemon-world-lib',
@@ -18,6 +21,7 @@ import { SearchService } from '../../services/search.service';
     PokemonCardComponent,
     PokemonCardComponent,
     SearchFieldComponent,
+    PokemonFiltersComponent,
   ],
   templateUrl: './pokemon-world-lib.component.html',
   styleUrl: './pokemon-world-lib.component.scss',
@@ -25,11 +29,20 @@ import { SearchService } from '../../services/search.service';
 export class PokemonWorldLibComponent implements OnInit {
   pokemonService = inject(PokemonWorldLibService);
   searchService = inject(SearchService);
+  filtersService = inject(pokemonFilterService);
   pokemonList: any = [];
 
   ngOnInit(): void {
     this.searchService.search$.subscribe((searchTerm) => {
       this.loadPokemonList({ search: searchTerm });
+    });
+
+    this.filtersService.filters$.subscribe((filters: PokemonType) => {
+      console.log('Selected filter:', filters.url);
+
+      this.loadPokemonList({
+        type: filters.url || '',
+      });
     });
 
     const searchValue = this.searchService.getSearchTerm() || '';
@@ -39,7 +52,7 @@ export class PokemonWorldLibComponent implements OnInit {
   private loadPokemonList(queryParams: PokemonQuery) {
     this.pokemonList = [];
     this.pokemonService
-      .getPokemonList({ search: queryParams.search || '' })
+      .getPokemonList(queryParams)
       .pipe(
         switchMap((pokemonList) => {
           const detailRequests = pokemonList.map((pokemon) =>
